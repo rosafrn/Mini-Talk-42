@@ -6,6 +6,7 @@ int main (int argc, char **argv)
 
     pid = getpid();
     client(argv[1], pid);
+    hello
 
 }
 
