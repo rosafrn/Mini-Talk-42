@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <signal.h>
 
-void client(unsigned char *str, pid_t pid);
-void    binary(int i, pid_t pid);
+void client(pid_t pid, unsigned char *str);
+void    encode(int i, pid_t pid);
 
 #endif

@@ -13,7 +13,6 @@ int main (int argc, char **argv)
 
 }
 
-
 void client(pid_t pid, unsigned char *str)
 {
     int i;
@@ -21,13 +20,13 @@ void client(pid_t pid, unsigned char *str)
     i = 0;
     while(str[i] != '\0')
     {
-        binary(str[i], pid);
+        encode(str[i], pid);
         i++;
         printf(" ");
     }
 }
 
-void    binary(int i, pid_t pid)
+void    encode(int i, pid_t pid)
 {
     int x;
 
@@ -45,4 +44,3 @@ void    binary(int i, pid_t pid)
     else
         kill(SIGUSR2, pid);*/
 }
-
