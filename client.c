@@ -5,32 +5,44 @@ int main (int argc, char **argv)
     pid_t pid;
 
     pid = getpid();
-    printf("PID: %d\n", pid);
+    //printf("PID: %d\n", pid);
     if (argc == 2)
-        client(argv[1], pid);
+        client(pid, argv[1]);
     else 
         return (1);
 
 }
 
 
-void client(char *str, pid_t pid)
+void client(pid_t pid, unsigned char *str)
 {
-    printf("%s\n", str);
-    // while(signals != NULL)
-    // {
-        
-    // }
+    int i;
+
+    i = 0;
+    while(str[i] != '\0')
+    {
+        binary(str[i], pid);
+        i++;
+        printf(" ");
+    }
 }
 
-char *binary(char *str)
+void    binary(int i, pid_t pid)
 {
-    char *tmp;
+    int x;
 
-    tmp = str;
-    while (tmp != NULL)
+    x = 7;
+    while(x >= 0)
     {
-        
+        if ((i >> x) & 1)
+            printf("1");
+        else
+            printf("0");
+        x--;
     }
+    /*if ((i % 2) == 0)
+        kill(SIGUSR1, pid);
+    else
+        kill(SIGUSR2, pid);*/
 }
 

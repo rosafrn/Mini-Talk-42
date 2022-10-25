@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <signal.h>
 
-void client(char *str, pid_t pid);
+void client(unsigned char *str, pid_t pid);
+void    binary(int i, pid_t pid);
 
 #endif
