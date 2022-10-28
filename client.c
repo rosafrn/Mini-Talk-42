@@ -2,7 +2,7 @@
 
 int main (int argc, char **argv)
 {
-    if (argc != 2)
+    if (argc != 3)
         return (1);
     client(argv[1], argv[2]);
 }
@@ -16,13 +16,13 @@ void client(char *server_pid, unsigned char *str)
     pid = atoi(server_pid);
     while(str[i] != '\0')
     {
-        encode(str[i], pid);
+        send_encode(str[i], pid);
             i++;
         printf(" ");
     }
 }
 
-void    encode(int i, pid_t pid)
+void    send_encode(int i, pid_t pid)
 {
     int x;
 

@@ -12,23 +12,8 @@ int main()
         return (1);
     printf("PID: %d\n", pid);
     handle_signals();
-    // char *str = "01110010";
-    // char *tmp = NULL;
-    // int z = 0;
-
-    // int i = 0;
-    // while (i < 8)
-    // {
-    //     if (str[i] == '1')
-    //     {
-    //         z = (z * 2) + 1;
-    //     }
-    //     else 
-    //         z = (z * 2) + 0;
-    //     i++;   
-    // }
-    // char x = z;
-    // printf("%c", x);
+    print_decode();
+    free (str);
 }
 
 void handle_signals()
@@ -45,9 +30,37 @@ void handle_SIGUSR(int sig)
     char *tmp;
     
     if (str == NULL)
-        str = strdup(" ");
+        str = ft_strdup(" ");
     if (sig == SIGUSR1)
-        strjoin(str, "0");
+        tmp = ft_strjoin(str, "0");
     else if (sig == SIGUSR2)
-        strjoin(str, "1");
+        tmp = ft_strjoin(str, "1");
+    free(str);
+    str = tmp;
+}
+
+void print_decode()
+{
+    int letter;
+    int i;
+    int x;
+
+    i = 0;
+    while (str[i] != '\0')
+    {
+        letter = 0;
+        x = 0;
+        while (x < 8 && str[i] != '\0')
+        {
+            letter <<= 1;// Shift the values in result left once.  Same ase
+                // result *= 2;
+            // if intMe[i] == '0', we don't do anything.
+            if (str[i] == '1')
+                letter += 1;
+            i++;
+            x++;
+        }
+        write(1, &letter, 1);
+        i++; 
+    }
 }
