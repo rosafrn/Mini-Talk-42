@@ -2,26 +2,22 @@
 
 int main (int argc, char **argv)
 {
-    pid_t pid;
-
-    pid = getpid();
-    //printf("PID: %d\n", pid);
-    if (argc == 2)
-        client(pid, argv[1]);
-    else 
+    if (argc != 2)
         return (1);
-
+    client(argv[1], argv[2]);
 }
 
-void client(pid_t pid, unsigned char *str)
+void client(char *server_pid, unsigned char *str)
 {
     int i;
+    pid_t pid;
 
     i = 0;
+    pid = atoi(server_pid);
     while(str[i] != '\0')
     {
         encode(str[i], pid);
-        i++;
+            i++;
         printf(" ");
     }
 }
@@ -34,13 +30,10 @@ void    encode(int i, pid_t pid)
     while(x >= 0)
     {
         if ((i >> x) & 1)
-            printf("1");
+            kill(SIGUSR2, pid);
         else
-            printf("0");
+            kill(SIGUSR1, pid);
         x--;
     }
-    /*if ((i % 2) == 0)
-        kill(SIGUSR1, pid);
-    else
-        kill(SIGUSR2, pid);*/
 }
+
