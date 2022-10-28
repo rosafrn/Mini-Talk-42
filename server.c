@@ -1,61 +1,109 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rosferna <rosferna@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/28 21:45:18 by rosferna          #+#    #+#             */
+/*   Updated: 2022/10/28 21:59:26 by rosferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mini_talk.h"
 
-int main()
+int	main(void)
 {
-    pid_t pid;
-    struct sigaction sa;
+	struct sigaction	sa;
 
-    sa.sa_handler = &handle_SIGUSR;
-    sa.sa_flags = SA_SIGINFO;
-    sigaction(SIGUSR1, &sa, NULL);
-    sigaction(SIGUSR2, &sa, NULL);
-    pid = getpid();
-    if (pid == -1)
-        return (1);
-    printf("PID: %d\n", pid);
-    while (1)
+	sa.sa_handler = &handle_signals;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
+	print_pid();
+	while (1)
 		pause();
-    return(0);
+	return (0);
 }
 
-void handle_SIGUSR(int sig)
+void	print_pid(void)
 {
-    static int i;
-    static char letter;
+	pid_t	pid;
+	char	*c;
+	int		i;
 
-    if (sig == SIGUSR2 || sig == SIGUSR1)
-    {
-        if (sig == SIGUSR2)
-		    letter |= (1 << i);
-        i++;
-        if (i == 8)
-        {
-            write(1, &letter, 1);
-            letter = 0;
-            i = 0;
-        }
-    }
+	i = 0;
+	pid = getpid();
+	if (pid == -1)
+		return ;
+	c = ft_itoa(pid);
+	write(1, "PID: ", 5);
+	while (c[i])
+	{
+		write(1, &c[i], 1);
+		i++;
+	}
+	write(1, "\n", 1);
 }
 
-/*void print_decode()
+void	handle_signals(int sig)
 {
- 
-    i = 0;
-    while (str[i] != '\0')
-    {
-        letter = 0;
-        x = 0;
-        while (x < 8 && str[i] != '\0')
-        {
-            letter <<= 1;// Shift the values in result left once.  Same ase
-                // result *= 2;
-            // if intMe[i] == '0', we don't do anything.
-            if (str[i] == '1')
-                letter += 1;
-            i++;
-            x++;
-        }
-        write(1, &letter, 1);
-        i++; 
-    }
-}*/
+	static int	i = 0;
+	static int	letter = 0;
+
+	letter *= 2;
+	if (sig == SIGUSR2)
+		letter += 1;
+	i++;
+	if (i == 8)
+	{
+		write(1, &letter, 1);
+		letter = 0;
+		i = 0;
+	}
+}
+
+int	countdigits(long n)
+{
+	int	d;
+
+	if (n < 0)
+		d = 1;
+	else
+		d = 0;
+	while (1)
+	{
+		n = n / 10;
+		d++;
+		if (n == 0)
+			break ;
+	}
+	return (d);
+}
+
+char	*ft_itoa(int n)
+{
+	int		d;
+	long	nn;
+	char	*ret;
+
+	nn = (long)n;
+	d = countdigits(nn);
+	ret = malloc((d + 1) * sizeof(char));
+	if (!ret)
+		return (0);
+	if (nn < 0)
+	{
+		ret[0] = '-';
+		nn = nn * -1;
+	}
+	ret[d] = '\0';
+	while (1)
+	{
+		ret[d - 1] = nn % 10 + '0';
+		nn = nn / 10;
+		d--;
+		if (nn == 0)
+			break ;
+	}
+	return (ret);
+}
