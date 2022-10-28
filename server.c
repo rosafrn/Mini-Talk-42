@@ -1,50 +1,45 @@
 #include "mini_talk.h"
 
-char *str;
-
 int main()
 {
     pid_t pid;
+    struct sigaction sa;
 
-    str = NULL;
+    sa.sa_handler = &handle_SIGUSR;
+    sa.sa_flags = SA_SIGINFO;
+    sigaction(SIGUSR1, &sa, NULL);
+    sigaction(SIGUSR2, &sa, NULL);
     pid = getpid();
     if (pid == -1)
         return (1);
     printf("PID: %d\n", pid);
-    handle_signals();
-    print_decode();
-    free (str);
-}
-
-void handle_signals()
-{
-    struct sigaction sa;
-
-    sa.sa_handler = &handle_SIGUSR;
-    sigaction(SIGUSR1, &sa, NULL);
-    sigaction(SIGUSR2, &sa, NULL);
+    while (1)
+		pause();
+    return(0);
 }
 
 void handle_SIGUSR(int sig)
 {
-    char *tmp;
-    
-    if (str == NULL)
-        str = ft_strdup(" ");
-    if (sig == SIGUSR1)
-        tmp = ft_strjoin(str, "0");
-    else if (sig == SIGUSR2)
-        tmp = ft_strjoin(str, "1");
-    free(str);
-    str = tmp;
+    static int i;
+    static char letter;
+
+    if (sig == SIGUSR2 || sig == SIGUSR1)
+    {
+        if (sig == SIGUSR2)
+		    letter |= (1 << i);
+        i++;
+        if (i == 8)
+        {
+            write(1, &letter, 1);
+            letter = 0;
+            i = 0;
+        }
+    }
 }
 
-void print_decode()
+/*void print_decode()
 {
-    int letter;
-    int i;
-    int x;
-
+ 
     i = 0;
     while (str[i] != '\0')
     {
@@ -63,4 +58,4 @@ void print_decode()
         write(1, &letter, 1);
         i++; 
     }
-}
+}*/

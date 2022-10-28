@@ -18,7 +18,6 @@ void client(char *server_pid, unsigned char *str)
     {
         send_encode(str[i], pid);
             i++;
-        printf(" ");
     }
 }
 
@@ -26,14 +25,15 @@ void    send_encode(int i, pid_t pid)
 {
     int x;
 
-    x = 7;
-    while(x >= 0)
+    x = 0;
+    while(x < 8)
     {
         if ((i >> x) & 1)
-            kill(SIGUSR2, pid);
+            kill(pid, SIGUSR2);
         else
-            kill(SIGUSR1, pid);
-        x--;
+            kill(pid, SIGUSR1);
+        usleep(30);
+        x++;
     }
 }
 
