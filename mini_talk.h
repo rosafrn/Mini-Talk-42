@@ -6,7 +6,7 @@
 /*   By: rosferna <rosferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 21:39:34 by rosferna          #+#    #+#             */
-/*   Updated: 2022/10/28 21:41:31 by rosferna         ###   ########.fr       */
+/*   Updated: 2022/10/28 22:10:39 by rosferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,5 @@ void	handle_signals(int sig);
 void	print_pid(void);
 int		countdigits(long n);
 char	*ft_itoa(int n);
+int		ft_atoi(const char *str);
 #endif
