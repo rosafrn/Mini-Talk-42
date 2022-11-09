@@ -6,7 +6,7 @@
 /*   By: rosferna <rosferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 21:45:21 by rosferna          #+#    #+#             */
-/*   Updated: 2022/10/28 22:13:10 by rosferna         ###   ########.fr       */
+/*   Updated: 2022/11/09 22:09:49 by rosferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	send_encode(int i, pid_t pid)
 			kill(pid, SIGUSR2);
 		else
 			kill(pid, SIGUSR1);
-		usleep(30);
+		usleep(35);
 		x--;
 	}
 }

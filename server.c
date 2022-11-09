@@ -6,7 +6,7 @@
 /*   By: rosferna <rosferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 21:45:18 by rosferna          #+#    #+#             */
-/*   Updated: 2022/11/09 18:39:18 by rosferna         ###   ########.fr       */
+/*   Updated: 2022/11/09 22:29:26 by rosferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,19 @@
 int	main(void)
 {
 	struct sigaction	sa;
+	sigset_t			locker;
 
+	sigemptyset(&locker);
+	sigaddset(&locker, SIGUSR1);
+	sigaddset(&locker, SIGUSR2);
+	sa.sa_mask = locker;
 	sa.sa_handler = &handle_signals;
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	print_pid();
 	while (1)
-		pause();
+		pause ();
 	return (0);
 }
 
@@ -43,6 +48,7 @@ void	print_pid(void)
 		write(1, &c[i], 1);
 		i++;
 	}
+	free (c);
 	write(1, "\n", 1);
 }
 
@@ -54,6 +60,8 @@ void	handle_signals(int sig)
 	letter *= 2;
 	if (sig == SIGUSR2)
 		letter += 1;
+	else
+		letter += 0;
 	i++;
 	if (i == 8)
 	{
