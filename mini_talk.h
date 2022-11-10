@@ -19,7 +19,7 @@
 # include <stdlib.h>
 
 void	client(char *server_pid, unsigned char *str);
-void	send_encode(int i, pid_t pid);
+void	send_encode(unsigned char i, pid_t pid);
 void	handle_signals(int sig);
 void	print_pid(void);
 int		countdigits(long n);

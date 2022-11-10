@@ -33,7 +33,7 @@ void	client(char *server_pid, unsigned char *str)
 	}
 }
 
-void	send_encode(int i, pid_t pid)
+void	send_encode(unsigned char i, pid_t pid)
 {
 	int	x;
 
@@ -44,7 +44,7 @@ void	send_encode(int i, pid_t pid)
 			kill(pid, SIGUSR2);
 		else
 			kill(pid, SIGUSR1);
-		usleep(35);
+		usleep(100);
 		x--;
 	}
 }
