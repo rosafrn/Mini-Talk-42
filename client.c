@@ -6,7 +6,7 @@
 /*   By: rosferna <rosferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 21:45:21 by rosferna          #+#    #+#             */
-/*   Updated: 2022/11/09 22:09:49 by rosferna         ###   ########.fr       */
+/*   Updated: 2022/12/15 14:31:06 by rosferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,37 @@ int	main(int argc, char **argv)
 {
 	if (argc != 3)
 		return (1);
-	client(argv[1], (unsigned char *)argv[2]);
+	if (send(argv[1], (unsigned char *)argv[2]))
+		return (1);
+	return (0);
 }
 
-void	client(char *server_pid, unsigned char *str)
+int	send(char *server_pid, unsigned char *str)
 {
 	int		i;
 	pid_t	pid;
 
 	i = 0;
 	pid = ft_atoi(server_pid);
+	if (pid <= 0)
+	{
+		write(1, "Enter a valid PID\n", 18);
+		return (1);
+	}
 	while (str[i] != '\0')
 	{
-		send_encode(str[i], pid);
+		if (encode(str[i], pid) == 1)
+		{
+			write(1, "Clound't send signal\n", 21);
+			return (1);
+		}
 		i++;
 	}
+	send_null(pid); 
+	return (0);
 }
 
-void	send_encode(unsigned char i, pid_t pid)
+int	encode(unsigned char i, pid_t pid)
 {
 	int	x;
 
@@ -41,12 +54,33 @@ void	send_encode(unsigned char i, pid_t pid)
 	while (x >= 0)
 	{
 		if ((i >> x) & 1)
-			kill(pid, SIGUSR2);
+		{
+			if (kill(pid, SIGUSR2) == -1)
+				return (1);
+		}
 		else
-			kill(pid, SIGUSR1);
+		{
+			if (kill(pid, SIGUSR1) == -1)
+				return (1);
+		}
 		usleep(100);
 		x--;
 	}
+	return (0);
+}
+
+int send_null(pid_t pid)
+{
+	int	i;
+	
+	i = 0;
+	while (i < 8)
+	{
+		if (kill(pid, SIGUSR1) == -1)
+				return (1);
+		i++;
+	}
+	return (0);
 }
 
 int	ft_atoi(const char *str)
