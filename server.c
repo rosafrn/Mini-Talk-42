@@ -6,7 +6,7 @@
 /*   By: rosferna <rosferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 21:45:18 by rosferna          #+#    #+#             */
-/*   Updated: 2022/12/15 14:31:52 by rosferna         ###   ########.fr       */
+/*   Updated: 2022/12/15 14:48:03 by rosferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,41 +58,31 @@ void	handle_signals(int sig, siginfo_t *info, void *context)
 {
 	static int		i = 0;
 	static int		letter = 0;
-	static pid_t	client_pid;
-	static int 		x = 0;
 
-	if (x == 0)
-	{
-		client_pid = info->si_pid;
-	}
-	x = 1;
 	(void)context;
-	if (info->si_pid == client_pid)
+	letter *= 2;
+	if (sig == SIGUSR2)
+		letter += 1;
+	else
+		letter += 0;
+	i++;
+	if (i == 8)
 	{
-		letter *= 2;
-		if (sig == SIGUSR2)
-			letter += 1;
-		else
-			letter += 0;
-		i++;
-		if (i == 8)
+		if (letter == 0)
 		{
-			if (letter == 0)
-			{
-				x = 0;
-			}
-			else 
-				write(1, &letter, 1);
-			letter = 0;
-			i = 0;
+			if (kill(info->si_pid, SIGUSR1) == -1)
+				write(1, "\nKill cound't send signal.\n", 27);
 		}
+		else
+			write(1, &letter, 1);
+		letter = 0;
+		i = 0;
 	}
 	else
 	{
 		write(1, "\nUndifined Behaviour. Bit loss. Quit.", 38);
 		letter = 0;
 		i = 0;
-		error = 1;
 	}
 }
 

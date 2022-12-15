@@ -6,7 +6,7 @@
 /*   By: rosferna <rosferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 21:45:21 by rosferna          #+#    #+#             */
-/*   Updated: 2022/12/15 14:31:06 by rosferna         ###   ########.fr       */
+/*   Updated: 2022/12/15 14:45:48 by rosferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	send(char *server_pid, unsigned char *str)
 	{
 		if (encode(str[i], pid) == 1)
 		{
-			write(1, "Clound't send signal\n", 21);
+			write(1, "\nKill clound't send signal\n", 27);
 			return (1);
 		}
 		i++;
@@ -72,7 +72,7 @@ int	encode(unsigned char i, pid_t pid)
 int send_null(pid_t pid)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < 8)
 	{
